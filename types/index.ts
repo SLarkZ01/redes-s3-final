@@ -106,9 +106,22 @@ export interface ReferenceData {
   url?: string;
 }
 
+export interface VideoResource {
+  id: string;
+  title: string;
+  url: string;
+  description: string;
+}
+
 // Composite interfaces for sections
 export interface HeroContent extends SectionContent {
   typingTexts: string[];
+}
+
+export interface RecursosVisualesContent extends SectionContent {
+  videos: VideoResource[];
+  networkDiagram: DiagramData;
+  packetFlowDiagram: DiagramData;
 }
 
 export interface DefinicionContent extends SectionContent {

@@ -9,6 +9,7 @@ import { ImportanciaSection } from '@/components/sections/ImportanciaSection';
 import { CaracteristicasSection } from '@/components/sections/CaracteristicasSection';
 import { FuncionamientoSection } from '@/components/sections/FuncionamientoSection';
 import { EjemploSection } from '@/components/sections/EjemploSection';
+import { RecursosVisualesSection } from '@/components/sections/RecursosVisualesSection';
 import { ReferenciasSection } from '@/components/sections/ReferenciasSection';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useNavigation } from '@/hooks/useNavigation';
@@ -20,6 +21,7 @@ import {
   caracteristicasContent,
   funcionamientoContent,
   ejemploContent,
+  recursosVisualesContent,
   referenciasContent,
 } from '@/data/content';
 import { networkDiagram } from '@/data/diagrams';
@@ -66,6 +68,7 @@ export default function HomePage() {
           content={ejemploContent}
           diagramData={networkDiagram}
         />
+        <RecursosVisualesSection id="recursos" content={recursosVisualesContent} />
         <ReferenciasSection id="referencias" content={referenciasContent} />
       </main>
 

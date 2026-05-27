@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   title: 'Seguridad en Redes — Firewalls, IDS e IPS',
   description:
     'Proyecto educativo sobre seguridad en redes de computadores: Firewalls, Sistemas de Detección de Intrusiones (IDS) y Sistemas de Prevención de Intrusiones (IPS).',
-  generator: 'v0.app',
   keywords: [
     'seguridad en redes',
     'firewall',

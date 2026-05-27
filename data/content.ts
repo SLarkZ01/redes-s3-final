@@ -6,8 +6,10 @@ import type {
   CaracteristicasContent,
   FuncionamientoContent,
   EjemploContent,
+  RecursosVisualesContent,
   ReferenciasContent,
 } from '@/types';
+import { networkDiagram, packetFlowDiagram } from './diagrams';
 
 export const navigationItems: NavigationItem[] = [
   { id: 'hero', label: 'Inicio', icon: 'Home' },
@@ -16,6 +18,7 @@ export const navigationItems: NavigationItem[] = [
   { id: 'caracteristicas', label: 'Características', icon: 'Settings' },
   { id: 'funcionamiento', label: 'Funcionamiento', icon: 'Workflow' },
   { id: 'ejemplo', label: 'Caso Práctico', icon: 'Network' },
+  { id: 'recursos', label: 'Recursos Visuales', icon: 'Video' },
   { id: 'referencias', label: 'Referencias', icon: 'BookMarked' },
 ];
 
@@ -299,9 +302,39 @@ export const ejemploContent: EjemploContent = {
   ],
 };
 
+export const recursosVisualesContent: RecursosVisualesContent = {
+  id: 'recursos',
+  title: '6. Recursos Visuales de Apoyo',
+  videos: [
+    {
+      id: 'firewall-explained',
+      title: '¿Qué es un Firewall? — Explicación completa',
+      url: 'https://www.youtube.com/embed/kH6oP6JUnHI',
+      description:
+        'Video educativo en español que explica qué es un firewall, cómo funciona el filtrado de paquetes, los diferentes tipos (packet filtering, stateful, proxy, NGFW) y por qué es la primera línea de defensa en una red.',
+    },
+    {
+      id: 'ids-ips-comparison',
+      title: 'IDS vs IPS — Diferencias clave en ciberseguridad',
+      url: 'https://www.youtube.com/embed/6-asM2Bh2yE',
+      description:
+        'Comparación detallada entre sistemas de detección (IDS) y prevención (IPS) de intrusiones. Explica visualmente la diferencia entre modo pasivo (fuera de banda) y modo activo (en línea), y cuándo usar cada tecnología.',
+    },
+    {
+      id: 'ngfw-deep-dive',
+      title: 'Next-Generation Firewall — Más allá del filtrado tradicional',
+      url: 'https://www.youtube.com/embed/ISpZDLtYrIE',
+      description:
+        'Explicación de las capacidades de un Firewall de Nueva Generación (NGFW): inspección profunda de paquetes (DPI), control de aplicaciones a nivel 7, prevención de intrusiones integrada, filtrado por identidad de usuario y threat intelligence en tiempo real.',
+    },
+  ],
+  networkDiagram,
+  packetFlowDiagram,
+};
+
 export const referenciasContent: ReferenciasContent = {
   id: 'referencias',
-  title: '6. Referencias Consultadas',
+  title: '7. Referencias Consultadas',
   references: [
     {
       id: 1,

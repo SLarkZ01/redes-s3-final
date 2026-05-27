@@ -8,6 +8,7 @@ import {
   Settings,
   Workflow,
   Network,
+  Video,
   BookMarked,
 } from 'lucide-react';
 import type { NavigationItem } from '@/types';
@@ -26,6 +27,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Settings,
   Workflow,
   Network,
+  Video,
   BookMarked,
 };
 
