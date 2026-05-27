@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import type { BaseSectionProps } from '@/types';
 import { cn } from '@/lib/utils';
@@ -8,7 +9,7 @@ interface SectionProps extends BaseSectionProps {
   fullHeight?: boolean;
 }
 
-export function Section({
+export const Section = memo(function Section({
   id,
   className,
   children,
@@ -30,4 +31,4 @@ export function Section({
       {children}
     </motion.section>
   );
-}
+});

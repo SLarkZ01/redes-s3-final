@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Shield } from 'lucide-react';
 import {
@@ -32,7 +32,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   BookMarked,
 };
 
-export function Header({ items, activeSection, onNavigate }: HeaderProps) {
+export const Header = memo(function Header({ items, activeSection, onNavigate }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleNavigate = (sectionId: string) => {
@@ -120,4 +120,4 @@ export function Header({ items, activeSection, onNavigate }: HeaderProps) {
       </AnimatePresence>
     </header>
   );
-}
+});

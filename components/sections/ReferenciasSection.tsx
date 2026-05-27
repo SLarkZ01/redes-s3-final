@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, Book } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
@@ -11,7 +12,7 @@ interface ReferenciasSectionProps extends BaseSectionProps {
   content: ReferenciasContent;
 }
 
-export function ReferenciasSection({
+export const ReferenciasSection = memo(function ReferenciasSection({
   content,
   id,
   className,
@@ -73,4 +74,4 @@ export function ReferenciasSection({
       </div>
     </Section>
   );
-}
+});

@@ -134,4 +134,10 @@
   .text-glow-green {
     text-shadow: 0 0 20px var(--green-glow);
   }
+
+  /* Content visibility for off-screen sections */
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
 }

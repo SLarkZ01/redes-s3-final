@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FileSearch,
@@ -25,7 +25,7 @@ const detectionIconMap: Record<string, React.ComponentType<{ className?: string 
   ClipboardCheck,
 };
 
-export function CaracteristicasSection({
+export const CaracteristicasSection = memo(function CaracteristicasSection({
   content,
   id,
   className,
@@ -212,4 +212,4 @@ export function CaracteristicasSection({
       </div>
     </Section>
   );
-}
+});

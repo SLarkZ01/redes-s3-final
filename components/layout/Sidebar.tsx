@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import {
   Home,
@@ -31,7 +32,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   BookMarked,
 };
 
-export function Sidebar({ items, activeSection, onNavigate }: SidebarProps) {
+export const Sidebar = memo(function Sidebar({ items, activeSection, onNavigate }: SidebarProps) {
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-full w-64 border-r border-cyan-500/10 bg-[#0d0d14] md:block">
       {/* Logo */}
@@ -119,4 +120,4 @@ export function Sidebar({ items, activeSection, onNavigate }: SidebarProps) {
       </div>
     </aside>
   );
-}
+});

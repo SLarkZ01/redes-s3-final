@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Ban, ShieldOff, Eye, CheckCircle } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
@@ -20,7 +21,7 @@ const resultIconMap: Record<string, React.ComponentType<{ className?: string }>>
   CheckCircle,
 };
 
-export function EjemploSection({
+export const EjemploSection = memo(function EjemploSection({
   content,
   diagramData,
   id,
@@ -138,4 +139,4 @@ export function EjemploSection({
       </div>
     </Section>
   );
-}
+});

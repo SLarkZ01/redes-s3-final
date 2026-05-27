@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { cn } from '@/lib/utils';
 
 interface GlowTextProps {
@@ -9,7 +10,7 @@ interface GlowTextProps {
   as?: 'span' | 'h1' | 'h2' | 'h3' | 'p';
 }
 
-export function GlowText({
+export const GlowText = memo(function GlowText({
   children,
   className,
   variant = 'cyan',
@@ -28,4 +29,4 @@ export function GlowText({
       {children}
     </Component>
   );
-}
+});

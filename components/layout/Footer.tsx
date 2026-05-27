@@ -1,9 +1,10 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Github, ExternalLink } from 'lucide-react';
+import { Shield, ExternalLink } from 'lucide-react';
 
-export function Footer() {
+export const Footer = memo(function Footer() {
   return (
     <footer className="border-t border-cyan-500/10 bg-[#0a0a0f] px-4 py-12 md:pl-64">
       <div className="mx-auto max-w-4xl">
@@ -66,4 +67,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+});

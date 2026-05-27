@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import type { TimelineStep } from '@/types';
 import { cn } from '@/lib/utils';
@@ -9,7 +10,7 @@ interface TimelineProps {
   className?: string;
 }
 
-export function Timeline({ steps, className }: TimelineProps) {
+export const Timeline = memo(function Timeline({ steps, className }: TimelineProps) {
   return (
     <div className={cn('relative', className)}>
       {/* Vertical line */}
@@ -56,4 +57,4 @@ export function Timeline({ steps, className }: TimelineProps) {
       </div>
     </div>
   );
-}
+});

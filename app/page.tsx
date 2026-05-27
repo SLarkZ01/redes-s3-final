@@ -1,16 +1,13 @@
 'use client';
 
+import { useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/sections/HeroSection';
 import { DefinicionSection } from '@/components/sections/DefinicionSection';
 import { ImportanciaSection } from '@/components/sections/ImportanciaSection';
-import { CaracteristicasSection } from '@/components/sections/CaracteristicasSection';
-import { FuncionamientoSection } from '@/components/sections/FuncionamientoSection';
-import { EjemploSection } from '@/components/sections/EjemploSection';
-import { RecursosVisualesSection } from '@/components/sections/RecursosVisualesSection';
-import { ReferenciasSection } from '@/components/sections/ReferenciasSection';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useNavigation } from '@/hooks/useNavigation';
 import {
@@ -26,6 +23,27 @@ import {
 } from '@/data/content';
 import { networkDiagram } from '@/data/diagrams';
 
+const CaracteristicasSection = dynamic(
+  () => import('@/components/sections/CaracteristicasSection').then((m) => ({ default: m.CaracteristicasSection })),
+  { ssr: false }
+);
+const FuncionamientoSection = dynamic(
+  () => import('@/components/sections/FuncionamientoSection').then((m) => ({ default: m.FuncionamientoSection })),
+  { ssr: false }
+);
+const EjemploSection = dynamic(
+  () => import('@/components/sections/EjemploSection').then((m) => ({ default: m.EjemploSection })),
+  { ssr: false }
+);
+const RecursosVisualesSection = dynamic(
+  () => import('@/components/sections/RecursosVisualesSection').then((m) => ({ default: m.RecursosVisualesSection })),
+  { ssr: false }
+);
+const ReferenciasSection = dynamic(
+  () => import('@/components/sections/ReferenciasSection').then((m) => ({ default: m.ReferenciasSection })),
+  { ssr: false }
+);
+
 const sectionIds = navigationItems.map((item) => item.id);
 
 export default function HomePage() {
@@ -35,28 +53,28 @@ export default function HomePage() {
   });
   const { scrollToSection } = useNavigation();
 
-  const handleNavigate = (sectionId: string) => {
-    setActiveSection(sectionId);
-    scrollToSection(sectionId);
-  };
+  const handleNavigate = useCallback(
+    (sectionId: string) => {
+      setActiveSection(sectionId);
+      scrollToSection(sectionId);
+    },
+    [setActiveSection, scrollToSection]
+  );
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
-      {/* Mobile Header */}
       <Header
         items={navigationItems}
         activeSection={activeSection}
         onNavigate={handleNavigate}
       />
 
-      {/* Desktop Sidebar */}
       <Sidebar
         items={navigationItems}
         activeSection={activeSection}
         onNavigate={handleNavigate}
       />
 
-      {/* Main content */}
       <main className="pt-16 md:pl-64 md:pt-0">
         <HeroSection id="hero" content={heroContent} />
         <DefinicionSection id="definicion" content={definicionContent} />
@@ -72,7 +90,6 @@ export default function HomePage() {
         <ReferenciasSection id="referencias" content={referenciasContent} />
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

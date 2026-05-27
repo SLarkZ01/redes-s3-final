@@ -1,5 +1,8 @@
 'use client';
 
+'use client';
+
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import {
   ShieldCheck,
@@ -28,7 +31,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Cloud,
 };
 
-export function ImportanciaSection({
+export const ImportanciaSection = memo(function ImportanciaSection({
   content,
   id,
   className,
@@ -105,4 +108,4 @@ export function ImportanciaSection({
       </div>
     </Section>
   );
-}
+});

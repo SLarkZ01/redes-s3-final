@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Cloud, Shield, Server, Network, Monitor, Lock } from 'lucide-react';
 import type { DiagramData } from '@/types';
@@ -83,7 +84,7 @@ function getLabelPosition(
   }
 }
 
-export function Diagram({ data, className }: DiagramProps) {
+export const Diagram = memo(function Diagram({ data, className }: DiagramProps) {
   const { nodes, connections, zones, legend, note } = data;
 
   const pad = 60;
@@ -323,4 +324,4 @@ export function Diagram({ data, className }: DiagramProps) {
       </svg>
     </div>
   );
-}
+});

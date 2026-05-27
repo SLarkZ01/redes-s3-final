@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Section } from '@/components/ui/Section';
 import { Timeline } from '@/components/ui/Timeline';
@@ -10,7 +11,7 @@ interface FuncionamientoSectionProps extends BaseSectionProps {
   content: FuncionamientoContent;
 }
 
-export function FuncionamientoSection({
+export const FuncionamientoSection = memo(function FuncionamientoSection({
   content,
   id,
   className,
@@ -18,7 +19,6 @@ export function FuncionamientoSection({
   return (
     <Section id={id} className={className}>
       <div className="mx-auto max-w-4xl">
-        {/* Section title */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -27,10 +27,8 @@ export function FuncionamientoSection({
         >
           <GlowText variant="cyan">{content.title}</GlowText>
         </motion.h2>
-
-        {/* Timeline */}
         <Timeline steps={content.steps} />
       </div>
     </Section>
   );
-}
+});

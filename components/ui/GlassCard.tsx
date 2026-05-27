@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -10,7 +11,7 @@ interface CardProps {
   glow?: boolean;
 }
 
-export function Card({
+export const Card = memo(function Card({
   className,
   children,
   hover = true,
@@ -31,4 +32,4 @@ export function Card({
       {children}
     </motion.div>
   );
-}
+});

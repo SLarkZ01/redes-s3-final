@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Eye, ShieldAlert } from 'lucide-react';
 import { Section } from '@/components/ui/Section';
@@ -17,7 +18,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   ShieldAlert,
 };
 
-export function DefinicionSection({
+export const DefinicionSection = memo(function DefinicionSection({
   content,
   id,
   className,
@@ -70,4 +71,4 @@ export function DefinicionSection({
       </div>
     </Section>
   );
-}
+});

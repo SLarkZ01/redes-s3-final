@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Section } from '@/components/ui/Section';
 import { Card } from '@/components/ui/GlassCard';
@@ -11,7 +12,7 @@ interface RecursosVisualesSectionProps extends BaseSectionProps {
   content: RecursosVisualesContent;
 }
 
-export function RecursosVisualesSection({
+export const RecursosVisualesSection = memo(function RecursosVisualesSection({
   content,
   id,
   className,
@@ -194,4 +195,4 @@ export function RecursosVisualesSection({
       </div>
     </Section>
   );
-}
+});
