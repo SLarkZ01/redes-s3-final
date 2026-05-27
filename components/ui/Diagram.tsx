@@ -55,13 +55,17 @@ function edgePoint(
 }
 
 export function Diagram({ data, className }: DiagramProps) {
-  const { nodes, connections } = data;
+  const { nodes, connections, zones, legend, note } = data;
 
   const pad = 60;
+  const noteHeight = note ? 32 : 0;
+  const legendHeight = legend ? legend.length * 22 + 8 : 0;
+  const bottomPad = 20 + noteHeight + legendHeight;
+
   const minX = Math.min(...nodes.map((n) => n.x)) - NODE_W / 2 - pad;
   const maxX = Math.max(...nodes.map((n) => n.x)) + NODE_W / 2 + pad;
   const minY = Math.min(...nodes.map((n) => n.y)) - NODE_H / 2 - pad;
-  const maxY = Math.max(...nodes.map((n) => n.y)) + NODE_H / 2 + pad;
+  const maxY = Math.max(...nodes.map((n) => n.y)) + NODE_H / 2 + bottomPad;
   const W = maxX - minX;
   const H = maxY - minY;
 
@@ -74,7 +78,7 @@ export function Diagram({ data, className }: DiagramProps) {
       >
         <defs>
           <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0,180,216,0.025)" strokeWidth="0.5" />
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0,180,216,0.02)" strokeWidth="0.5" />
           </pattern>
           <filter id="nodeGlow">
             <feGaussianBlur stdDeviation="4" result="blur" />
@@ -83,6 +87,10 @@ export function Diagram({ data, className }: DiagramProps) {
           <filter id="lineGlow">
             <feGaussianBlur stdDeviation="2" result="blur" />
             <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="zoneGlow">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feMerge><feMergeNode in="blur" /></feMerge>
           </filter>
           <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#00b4d8" stopOpacity="0.85" />
@@ -98,9 +106,33 @@ export function Diagram({ data, className }: DiagramProps) {
           <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#e85d04" opacity="0.8" />
           </marker>
+          <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#00b894" opacity="0.8" />
+          </marker>
+          <marker id="arrowThin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 2 L 10 5 L 0 8 z" fill="#aabbcc" opacity="0.8" />
+          </marker>
         </defs>
 
         <rect x={minX} y={minY} width={W} height={H} fill="url(#grid)" />
+
+        {/* Zones */}
+        {zones?.map((zone) => (
+          <g key={zone.id}>
+            <rect
+              x={zone.x} y={zone.y} width={zone.width} height={zone.height}
+              rx="16" fill={zone.color} fillOpacity="0.45"
+              stroke="rgba(0,180,216,0.1)" strokeWidth="1"
+              filter="url(#zoneGlow)"
+            />
+            <text
+              x={zone.x + 12} y={zone.y + 18}
+              fill="rgba(0,180,216,0.35)" fontSize="10"
+              fontFamily="JetBrains Mono, monospace" fontWeight="600"
+              letterSpacing="1"
+            >{zone.label.toUpperCase()}</text>
+          </g>
+        ))}
 
         {/* Connections */}
         {connections.map((conn, i) => {
@@ -108,9 +140,33 @@ export function Diagram({ data, className }: DiagramProps) {
           const to = nodes.find((n) => n.id === conn.to);
           if (!from || !to) return null;
 
+          const isMain = conn.style === 'thick';
+          const isBranch = conn.style === 'thin';
+          const isDashed = conn.style === 'dashed';
           const isOrange = from.type === 'firewall' || to.type === 'firewall';
-          const grad = isOrange ? 'url(#orangeGrad)' : 'url(#cyanGrad)';
-          const markerId = isOrange ? 'url(#arrowOrange)' : 'url(#arrowCyan)';
+
+          let grad: string, markerId: string, strokeWidth: number, strokeDash: string;
+          if (isMain) {
+            grad = 'url(#cyanGrad)';
+            markerId = 'url(#arrowCyan)';
+            strokeWidth = 3;
+            strokeDash = 'none';
+          } else if (isBranch) {
+            grad = '#aabbcc';
+            markerId = 'url(#arrowThin)';
+            strokeWidth = 1.5;
+            strokeDash = 'none';
+          } else if (isDashed) {
+            grad = 'url(#cyanGrad)';
+            markerId = 'url(#arrowCyan)';
+            strokeWidth = 2;
+            strokeDash = '6,4';
+          } else {
+            grad = isOrange ? 'url(#orangeGrad)' : 'url(#cyanGrad)';
+            markerId = isOrange ? 'url(#arrowOrange)' : 'url(#arrowCyan)';
+            strokeWidth = 2;
+            strokeDash = 'none';
+          }
 
           const s = edgePoint(from, to.x, to.y);
           const e = edgePoint(to, from.x, from.y);
@@ -120,8 +176,8 @@ export function Diagram({ data, className }: DiagramProps) {
           const dx = e.x - s.x;
           const dy = e.y - s.y;
           const len = Math.sqrt(dx * dx + dy * dy) || 1;
-          const offX = (-dy / len) * 16;
-          const offY = (dx / len) * 16;
+          const offX = (-dy / len) * (isBranch ? 20 : 16);
+          const offY = (dx / len) * (isBranch ? 20 : 16);
 
           return (
             <motion.g key={`${conn.from}-${conn.to}`}>
@@ -129,16 +185,31 @@ export function Diagram({ data, className }: DiagramProps) {
                 initial={{ pathLength: 0, opacity: 0 }}
                 whileInView={{ pathLength: 1, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.07 }}
+                transition={{ duration: isMain ? 0.7 : 0.5, delay: i * 0.06 }}
                 x1={s.x} y1={s.y} x2={e.x} y2={e.y}
-                stroke={grad} strokeWidth="2"
+                stroke={grad} strokeWidth={strokeWidth}
+                strokeDasharray={strokeDash}
                 markerEnd={markerId}
                 filter="url(#lineGlow)"
               />
               {conn.label && (
                 <g>
-                  <rect x={mx + offX - 38} y={my + offY - 10} width="76" height="20" rx="4" fill="#0a0a0f" fillOpacity="0.9" stroke="rgba(0,180,216,0.12)" strokeWidth="0.5" />
-                  <text x={mx + offX} y={my + offY + 4} textAnchor="middle" fill="#8899aa" fontSize="9" fontFamily="JetBrains Mono, monospace">{conn.label}</text>
+                  <rect
+                    x={mx + offX - (conn.label.length * 3.5 + 8)}
+                    y={my + offY - 10}
+                    width={conn.label.length * 7 + 16}
+                    height="20" rx="4"
+                    fill="#0a0a0f" fillOpacity="0.92"
+                    stroke={isBranch ? 'rgba(170,187,204,0.2)' : 'rgba(0,180,216,0.15)'}
+                    strokeWidth="0.5"
+                  />
+                  <text
+                    x={mx + offX} y={my + offY + 4}
+                    textAnchor="middle"
+                    fill={isBranch ? '#aabbcc' : '#aabbcc'}
+                    fontSize={isBranch ? 9 : 9}
+                    fontFamily="JetBrains Mono, monospace"
+                  >{conn.label}</text>
                 </g>
               )}
             </motion.g>
@@ -151,6 +222,7 @@ export function Diagram({ data, className }: DiagramProps) {
           const Icon = IconMap[node.type];
           const lines = node.label.split('\n');
           const isFw = node.type === 'firewall';
+          const isBranch = node.role === 'branch';
 
           const iconSize = 22;
           const lineHeight = 13;
@@ -167,18 +239,14 @@ export function Diagram({ data, className }: DiagramProps) {
               initial={{ opacity: 0, scale: 0.85 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: i * 0.05 }}
+              transition={{ duration: 0.35, delay: i * 0.04 }}
             >
               <rect
                 x={node.x - NODE_W / 2} y={node.y - NODE_H / 2}
                 width={NODE_W} height={NODE_H} rx={R}
-                fill={c.fill} stroke={c.stroke} strokeWidth="1.5"
-                filter="url(#nodeGlow)" opacity="0.95"
-              />
-              <rect
-                x={node.x - NODE_W / 2 + 2} y={node.y - NODE_H / 2 + 2}
-                width={NODE_W - 4} height={NODE_H - 4} rx={R - 2}
-                fill="none" stroke={c.stroke} strokeWidth="0.5" opacity="0.2"
+                fill={c.fill} stroke={c.stroke} strokeWidth={isBranch ? 1 : 1.5}
+                strokeDasharray={isBranch ? '4,3' : 'none'}
+                filter="url(#nodeGlow)" opacity={isBranch ? 0.85 : 0.95}
               />
               {Icon && (
                 <foreignObject x={node.x - iconSize / 2} y={iconY - iconSize / 2} width={iconSize} height={iconSize}>
@@ -195,15 +263,38 @@ export function Diagram({ data, className }: DiagramProps) {
                   textAnchor="middle"
                   dominantBaseline="middle"
                   fill={isFw ? c.text : c.text}
-                  fontSize="11"
-                  fontWeight="600"
+                  fontSize={isBranch ? 10 : 11}
+                  fontWeight={isBranch ? 500 : 600}
                   fontFamily="JetBrains Mono, monospace"
                   letterSpacing="0.3"
+                  opacity={isBranch ? 0.85 : 1}
                 >{l}</text>
               ))}
             </motion.g>
           );
         })}
+
+        {/* Legend */}
+        {legend && legend.length > 0 && (
+          <g transform={`translate(${minX + 16}, ${maxY - bottomPad + 8})`}>
+            {legend.map((item, i) => (
+              <g key={i} transform={`translate(0, ${i * 22})`}>
+                <rect x="0" y="0" width="12" height="12" rx="3" fill={item.color} opacity="0.8" />
+                <text x="18" y="10" fill="#8899aa" fontSize="10" fontFamily="JetBrains Mono, monospace">{item.label}</text>
+              </g>
+            ))}
+          </g>
+        )}
+
+        {/* Note */}
+        {note && (
+          <g transform={`translate(${minX + 16}, ${maxY - 16})`}>
+            <rect x="0" y="-28" width={W - 32} height="32" rx="6" fill="#0a0a0f" fillOpacity="0.8" stroke="rgba(0,180,216,0.12)" strokeWidth="0.5" />
+            <text x="12" y="-8" fill="#8899aa" fontSize="10" fontFamily="JetBrains Mono, monospace">
+               {note}
+            </text>
+          </g>
+        )}
       </svg>
     </div>
   );

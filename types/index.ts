@@ -66,23 +66,43 @@ export interface TimelineStep {
   description: string;
 }
 
+export interface DiagramZone {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+}
+
+export interface DiagramLegendItem {
+  color: string;
+  label: string;
+}
+
 export interface DiagramNode {
   id: string;
   label: string;
   x: number;
   y: number;
   type: 'cloud' | 'firewall' | 'server' | 'switch' | 'workstation' | 'vpn';
+  role?: 'input' | 'main' | 'branch' | 'output';
 }
 
 export interface DiagramConnection {
   from: string;
   to: string;
   label?: string;
+  style?: 'solid' | 'dashed' | 'thick' | 'thin';
 }
 
 export interface DiagramData {
   nodes: DiagramNode[];
   connections: DiagramConnection[];
+  zones?: DiagramZone[];
+  legend?: DiagramLegendItem[];
+  note?: string;
 }
 
 export interface ConfigurationItem {
