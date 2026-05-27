@@ -47,7 +47,7 @@ export function Header({ items, activeSection, onNavigate }: HeaderProps) {
         <div className="flex items-center gap-2">
           <Shield className="h-6 w-6 text-cyan-400" />
           <span className="font-mono text-lg font-bold text-cyan-400">
-            NetSec
+            SecRedes
           </span>
         </div>
 
@@ -105,6 +105,16 @@ export function Header({ items, activeSection, onNavigate }: HeaderProps) {
                 );
               })}
             </ul>
+            {/* Authors */}
+            <div className="border-t border-cyan-500/10 px-4 py-3">
+              <p className="text-center font-mono text-xs text-[#8888a0]">
+                Daniel Rivas Agredo
+                <br />
+                Thomas Montoya Magón
+                <br />
+                <span className="text-cyan-400/60">Redes de Computadores — 2026</span>
+              </p>
+            </div>
           </motion.nav>
         )}
       </AnimatePresence>

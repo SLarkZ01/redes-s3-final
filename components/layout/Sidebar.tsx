@@ -43,7 +43,7 @@ export function Sidebar({ items, activeSection, onNavigate }: SidebarProps) {
         >
           <Shield className="h-8 w-8 text-cyan-400" />
           <span className="font-mono text-lg font-bold text-cyan-400">
-            NetSec
+            SecRedes
           </span>
         </motion.div>
       </div>
@@ -110,9 +110,11 @@ export function Sidebar({ items, activeSection, onNavigate }: SidebarProps) {
       {/* Footer */}
       <div className="absolute bottom-0 left-0 right-0 border-t border-cyan-500/10 p-4">
         <p className="text-center font-mono text-xs text-[#8888a0]">
-          Universidad 2024
+          Daniel Rivas Agredo
           <br />
-          <span className="text-cyan-400/60">Redes de Computadores</span>
+          Thomas Montoya Magón
+          <br />
+          <span className="text-cyan-400/60">Redes de Computadores — 2026</span>
         </p>
       </div>
     </aside>

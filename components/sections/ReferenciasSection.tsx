@@ -70,20 +70,6 @@ export function ReferenciasSection({
             </motion.div>
           ))}
         </div>
-
-        {/* Additional note */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-8 flex items-start gap-3 rounded-lg border border-cyan-500/10 bg-cyan-500/5 p-4"
-        >
-          <Book className="h-5 w-5 flex-shrink-0 text-cyan-400" />
-          <p className="text-sm text-[#8888a0]">
-            Todas las referencias han sido consultadas y verificadas para este proyecto
-            educativo sobre seguridad en redes de computadores.
-          </p>
-        </motion.div>
       </div>
     </Section>
   );

@@ -2,18 +2,18 @@ import type { DiagramData } from '@/types';
 
 export const networkDiagram: DiagramData = {
   zones: [
-    { id: 'internet-zone', label: 'Zona Internet', x: 300, y: 10, width: 400, height: 140, color: '#0c1222' },
-    { id: 'perimeter-zone', label: 'Perímetro', x: 150, y: 140, width: 500, height: 80, color: '#1a0e08' },
+    { id: 'internet-zone', label: 'Zona Internet', x: 320, y: 10, width: 360, height: 130, color: '#0c1222' },
+    { id: 'perimeter-zone', label: 'Perímetro', x: 140, y: 140, width: 520, height: 80, color: '#1a0e08' },
     { id: 'dmz-zone', label: 'Zona DMZ', x: 250, y: 260, width: 500, height: 200, color: '#0a1a0e' },
     { id: 'lan-zone', label: 'Zona LAN Interna', x: 200, y: 480, width: 600, height: 220, color: '#0c1222' },
   ],
   nodes: [
     { id: 'internet', label: 'Internet', x: 500, y: 70, type: 'cloud' },
     { id: 'ngfw', label: 'NGFW + IPS', x: 500, y: 180, type: 'firewall' },
-    { id: 'vpn', label: 'VPN\nRemotos', x: 200, y: 180, type: 'vpn' },
+    { id: 'vpn', label: 'VPN\nRemotos', x: 190, y: 180, type: 'vpn' },
     { id: 'dmz-switch', label: 'Switch DMZ', x: 500, y: 320, type: 'switch' },
-    { id: 'web-server', label: 'Servidor Web', x: 340, y: 430, type: 'server' },
-    { id: 'mail-server', label: 'Servidor\nCorreo', x: 660, y: 430, type: 'server' },
+    { id: 'web-server', label: 'Servidor Web', x: 340, y: 440, type: 'server' },
+    { id: 'mail-server', label: 'Servidor\nCorreo', x: 660, y: 440, type: 'server' },
     { id: 'lan-switch', label: 'Switch LAN', x: 500, y: 560, type: 'switch' },
     { id: 'workstations', label: 'Estaciones\nTrabajo', x: 280, y: 670, type: 'workstation' },
     { id: 'db-server', label: 'Servidor BD', x: 500, y: 670, type: 'server' },
@@ -51,7 +51,7 @@ export const packetFlowDiagram: DiagramData = {
     { id: 'ips', label: 'IPS\nInspección\nActiva', x: 350, y: 410, type: 'firewall', role: 'main' },
     { id: 'dest', label: 'Red Interna\n✅ Permitido', x: 350, y: 520, type: 'server', role: 'output' },
     { id: 'fw-deny', label: '✗ DENEGAR\n(Drop)', x: 120, y: 170, type: 'server', role: 'branch' },
-    { id: 'ids-alert', label: ' ALERTA\n(Log)', x: 580, y: 290, type: 'server', role: 'branch' },
+    { id: 'ids-alert', label: '⚠ ALERTA\n(Log)', x: 580, y: 290, type: 'server', role: 'branch' },
     { id: 'ips-block', label: '✗ BLOQUEAR\n(Drop/RST)', x: 580, y: 410, type: 'server', role: 'branch' },
   ],
   connections: [
@@ -60,8 +60,8 @@ export const packetFlowDiagram: DiagramData = {
     { from: 'ids', to: 'ips', label: 'Sin amenaza', style: 'thick' },
     { from: 'ips', to: 'dest', label: 'Tráfico limpio', style: 'thick' },
     { from: 'fw', to: 'fw-deny', label: 'No coincide', style: 'thin' },
-    { from: 'ids', to: 'ids-alert', label: 'Detecta', style: 'thin' },
-    { from: 'ips', to: 'ips-block', label: 'Detecta', style: 'thin' },
+    { from: 'ids', to: 'ids-alert', label: 'Detecta (pasivo)', style: 'thin' },
+    { from: 'ips', to: 'ips-block', label: 'Detecta (activo)', style: 'thin' },
   ],
   note: 'El IDS es pasivo: genera alerta pero el tráfico continúa. El IPS es activo: puede bloquear el tráfico en tiempo real.',
   legend: [

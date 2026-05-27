@@ -54,11 +54,40 @@ function edgePoint(
   return { x, y };
 }
 
+function getLabelPosition(
+  sx: number, sy: number, ex: number, ey: number,
+  isBranch: boolean
+): { x: number; y: number } {
+  const mx = (sx + ex) / 2;
+  const my = (sy + ey) / 2;
+  const dx = ex - sx;
+  const dy = ey - sy;
+  const ax = Math.abs(dx);
+  const ay = Math.abs(dy);
+
+  const baseOffset = isBranch ? 28 : 20;
+
+  if (ay > ax * 1.5) {
+    // Vertical line: offset to the right
+    return { x: mx + baseOffset + 8, y: my };
+  } else if (ax > ay * 1.5) {
+    // Horizontal line: offset above
+    return { x: mx, y: my - baseOffset };
+  } else {
+    // Diagonal: perpendicular offset
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    return {
+      x: mx + (-dy / len) * baseOffset,
+      y: my + (dx / len) * baseOffset,
+    };
+  }
+}
+
 export function Diagram({ data, className }: DiagramProps) {
   const { nodes, connections, zones, legend, note } = data;
 
   const pad = 60;
-  const noteHeight = note ? 32 : 0;
+  const noteHeight = note ? 48 : 0;
   const legendHeight = legend ? legend.length * 22 + 8 : 0;
   const bottomPad = 20 + noteHeight + legendHeight;
 
@@ -106,9 +135,6 @@ export function Diagram({ data, className }: DiagramProps) {
           <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#e85d04" opacity="0.8" />
           </marker>
-          <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M 0 1 L 10 5 L 0 9 z" fill="#00b894" opacity="0.8" />
-          </marker>
           <marker id="arrowThin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
             <path d="M 0 2 L 10 5 L 0 8 z" fill="#aabbcc" opacity="0.8" />
           </marker>
@@ -126,10 +152,10 @@ export function Diagram({ data, className }: DiagramProps) {
               filter="url(#zoneGlow)"
             />
             <text
-              x={zone.x + 12} y={zone.y + 18}
-              fill="rgba(0,180,216,0.35)" fontSize="10"
+              x={zone.x + 14} y={zone.y + 20}
+              fill="rgba(0,180,216,0.4)" fontSize="10"
               fontFamily="JetBrains Mono, monospace" fontWeight="600"
-              letterSpacing="1"
+              letterSpacing="1.2"
             >{zone.label.toUpperCase()}</text>
           </g>
         ))}
@@ -171,13 +197,9 @@ export function Diagram({ data, className }: DiagramProps) {
           const s = edgePoint(from, to.x, to.y);
           const e = edgePoint(to, from.x, from.y);
 
-          const mx = (s.x + e.x) / 2;
-          const my = (s.y + e.y) / 2;
-          const dx = e.x - s.x;
-          const dy = e.y - s.y;
-          const len = Math.sqrt(dx * dx + dy * dy) || 1;
-          const offX = (-dy / len) * (isBranch ? 20 : 16);
-          const offY = (dx / len) * (isBranch ? 20 : 16);
+          const labelPos = getLabelPosition(s.x, s.y, e.x, e.y, isBranch);
+
+          const labelWidth = conn.label ? conn.label.length * 7 + 16 : 0;
 
           return (
             <motion.g key={`${conn.from}-${conn.to}`}>
@@ -195,18 +217,18 @@ export function Diagram({ data, className }: DiagramProps) {
               {conn.label && (
                 <g>
                   <rect
-                    x={mx + offX - (conn.label.length * 3.5 + 8)}
-                    y={my + offY - 10}
-                    width={conn.label.length * 7 + 16}
+                    x={labelPos.x - labelWidth / 2}
+                    y={labelPos.y - 10}
+                    width={labelWidth}
                     height="20" rx="4"
                     fill="#0a0a0f" fillOpacity="0.92"
                     stroke={isBranch ? 'rgba(170,187,204,0.2)' : 'rgba(0,180,216,0.15)'}
                     strokeWidth="0.5"
                   />
                   <text
-                    x={mx + offX} y={my + offY + 4}
+                    x={labelPos.x} y={labelPos.y + 4}
                     textAnchor="middle"
-                    fill={isBranch ? '#aabbcc' : '#aabbcc'}
+                    fill={isBranch ? '#aabbcc' : '#b0c4de'}
                     fontSize={isBranch ? 9 : 9}
                     fontFamily="JetBrains Mono, monospace"
                   >{conn.label}</text>
@@ -286,12 +308,15 @@ export function Diagram({ data, className }: DiagramProps) {
           </g>
         )}
 
-        {/* Note */}
+        {/* Note - split into 2 lines */}
         {note && (
           <g transform={`translate(${minX + 16}, ${maxY - 16})`}>
-            <rect x="0" y="-28" width={W - 32} height="32" rx="6" fill="#0a0a0f" fillOpacity="0.8" stroke="rgba(0,180,216,0.12)" strokeWidth="0.5" />
-            <text x="12" y="-8" fill="#8899aa" fontSize="10" fontFamily="JetBrains Mono, monospace">
-               {note}
+            <rect x="0" y="-36" width={W - 32} height="40" rx="6" fill="#0a0a0f" fillOpacity="0.85" stroke="rgba(0,180,216,0.12)" strokeWidth="0.5" />
+            <text x="12" y="-16" fill="#8899aa" fontSize="10" fontFamily="JetBrains Mono, monospace">
+              💡 El IDS es pasivo: genera alerta pero el tráfico continúa.
+            </text>
+            <text x="12" y="-2" fill="#8899aa" fontSize="10" fontFamily="JetBrains Mono, monospace">
+               El IPS es activo: puede bloquear el tráfico en tiempo real.
             </text>
           </g>
         )}

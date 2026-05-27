@@ -23,7 +23,7 @@ export function Footer() {
 
           {/* Description */}
           <p className="max-w-md text-sm text-[#8888a0]">
-            Proyecto educativo sobre Firewalls, IDS e IPS para la clase de Redes
+            Proyecto educativo sobre Firewalls, IDS e IPS para la asignatura de Redes
             de Computadores.
           </p>
 
@@ -39,7 +39,7 @@ export function Footer() {
               NIST SP 800-94
             </a>
             <a
-              href="https://www.ibm.com/reports/data-breach"
+              href="https://d110erj175o600.cloudfront.net/wp-content/uploads/2023/07/25111651/Cost-of-a-Data-Breach-Report-2023.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-[#8888a0] transition-colors hover:text-cyan-400"
@@ -54,10 +54,12 @@ export function Footer() {
 
           {/* Copyright */}
           <p className="font-mono text-xs text-[#8888a0]">
-            © 2024 — Redes de Computadores — Universidad
+            Daniel Rivas Agredo & Thomas Montoya Magón
+            <br />
+            © 2026 — Redes de Computadores — Universidad Autónoma del Cauca
             <br />
             <span className="text-cyan-400/60">
-              Desarrollado con Next.js, Tailwind CSS y Framer Motion
+              Desarrollado con Next.js
             </span>
           </p>
         </motion.div>

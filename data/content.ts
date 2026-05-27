@@ -370,7 +370,7 @@ export const referenciasContent: ReferenciasContent = {
       author: 'IBM',
       title: 'Cost of a Data Breach Report 2023',
       year: '2023',
-      url: 'https://www.ibm.com/reports/data-breach',
+      url: 'https://d110erj175o600.cloudfront.net/wp-content/uploads/2023/07/25111651/Cost-of-a-Data-Breach-Report-2023.pdf',
     },
     {
       id: 6,
